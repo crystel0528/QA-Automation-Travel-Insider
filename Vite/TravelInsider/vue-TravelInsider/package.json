@@ -11,32 +11,40 @@
     "build": "vite build",
     "preview": "vite preview",
 
-    "test": "playwright test",
-    "test:unit": "vitest",
+    "test": "npx playwright test",
     "test:e2e": "npx playwright test",
-    "test:login": "playwright test tests/load tests/playwright-tests/login.spec.js",
-    "test:ui": "npx playwright test",
-
-    "test:load:global": "npx k6 run vue-TravelInsider/k6-tests/global.load.js",
-    "test:load:travellink": "npx k6 run vue-TravelInsider/k6-tests/travellink.load.js",
-    "test:load:all": "npm run test:load:global && npm run test:load:travellink",
-
-    "test:all": "npm run test:e2e && npm run test:load:all",
-
     "test:headed": "npx playwright test --headed",
     "report": "npx playwright show-report",
-
-    "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
-    "lint:eslint": "eslint . --fix",
-    "lint": "run-s lint:*",
 
     "test:chromium": "npx playwright test --project=chromium",
     "test:firefox": "npx playwright test --project=firefox",
     "test:webkit": "npx playwright test --project=webkit",
 
+    "test:login": "npx playwright test \"tests/load tests/playwright-tests/login.spec.js\"",
+    "test:login-spec": "npx playwright test tests/login.spec.js",
+    "test:load-test": "npx playwright test tests/load-test.js",
+    "test:travelink": "npx playwright test tests/travelink.load.js",
+
     "test:travellink:chromium": "npx playwright test tests/travellink.spec.js --project=chromium",
     "test:travellink:firefox": "npx playwright test tests/travellink.spec.js --project=firefox",
-    "test:travellink:webkit": "npx playwright test tests/travellink.spec.js --project=webkit"
+    "test:travellink:webkit": "npx playwright test tests/travellink.spec.js --project=webkit",
+
+    "test:load:global": "npx k6 run vue-TravelInsider/k6-tests/global.load.js",
+    "test:load:travellink": "npx k6 run vue-TravelInsider/k6-tests/k6travellink.load.js",
+    "test:load:all": "npm run test:load:global && npm run test:load:travellink",
+
+    "test:chromium:all": "npm run test:chromium && npm run test:load:all",
+    "test:firefox:all": "npm run test:firefox && npm run test:load:all",
+    "test:webkit:all": "npm run test:webkit && npm run test:load:all",
+    "test:all:all": "npm run test:chromium:all && npm run test:firefox:all && npm run test:webkit:all",
+
+    "test:unit": "vitest",
+
+    "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
+    "lint:eslint": "eslint . --fix",
+    "lint": "run-s lint:*",
+
+    "commit:all": "git add -A && git commit -m \"Automated commit from QA pipeline\" && git push"
   },
   "dependencies": {
     "vue": "^3.5.22"
@@ -53,7 +61,7 @@
     "eslint-plugin-vue": "~10.4.0",
     "globals": "^16.3.0",
     "jsdom": "^27.0.0",
-    "npm-run-all2": "^8.0.4",
+    "npm-run-all": "^8.0.4",
     "oxlint": "~1.11.0",
     "vite": "^7.1.7",
     "vite-plugin-vue-devtools": "^8.0.2",
