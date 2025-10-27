@@ -1,0 +1,64 @@
+name: 🧪 TravelInsider QA Suite
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  qa-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- Checkout Repo ---
+      - name: 🧰 Checkout code
+        uses: actions/checkout@v4
+
+      # --- Setup Node.js ---
+      - name: ⚙️ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # --- Install Dependencies ---
+      - name: 📦 Install dependencies
+        working-directory: ./vue-TravelInsider
+        run: npm ci
+
+      # --- Install Browsers for Playwright ---
+      - name: 🎭 Install Playwright browsers
+        working-directory: ./vue-TravelInsider
+        run: npx playwright install --with-deps
+
+      # --- Install K6 ---
+      - name: 🧱 Install K6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg software-properties-common
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C5A1B6F5
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+
+      # --- Run Playwright + K6 Tests ---
+      - name: 🚀 Run all tests (Playwright + K6)
+        working-directory: ./vue-TravelInsider
+        run: npm run test:all
+
+      # --- Upload Playwright HTML Report ---
+      - name: 📊 Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: vue-TravelInsider/playwright-report/
+          retention-days: 7
+
+      # --- Upload K6 Logs (optional) ---
+      - name: 📈 Upload K6 Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-logs
+          path: vue-TravelInsider/logs/
+          retention-days: 7
