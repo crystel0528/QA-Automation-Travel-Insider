@@ -31,3 +31,14 @@ coverage
 
 test-results/
 playwright-report/
+
+
+# Ignore old folders
+QA-Automation-Travel-Insider/
+TravelInsider/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore build/dist folders (if any)
+dist/
